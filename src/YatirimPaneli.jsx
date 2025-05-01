@@ -58,8 +58,14 @@ export default function YatirimPaneli() {
   const totalProfit = totalCurrent - totalInvested;
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="p-4 space-y-6 bg-gray-900 text-white min-h-screen">
+      <div className="p-4 bg-gray-800 rounded-xl space-y-2 text-center text-lg font-medium">
+        <div>Toplam Yatırım: ₺{totalInvested.toFixed(2)}</div>
+        <div>Toplam Varlık Değeri: ₺{totalCurrent.toFixed(2)}</div>
+        <div className={totalProfit >= 0 ? "text-green-400" : "text-red-400"}>
+          Toplam Kar/Zarar: ₺{totalProfit.toFixed(2)}</div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {assets.map((asset) => {
           const price = asset.type === "coin" ? prices[asset.id]?.usd || 0 : prices[asset.id]?.try || 0;
           const amount = investments[asset.id]?.amount || 0;
@@ -70,34 +76,30 @@ export default function YatirimPaneli() {
           const currency = asset.type === "coin" ? "$" : "₺";
 
           return (
-            <Card key={asset.id}>
+            <Card key={asset.id} className="bg-gray-800 text-white">
               <CardContent className="space-y-2 p-4">
                 <div className="text-lg font-semibold">{asset.label}</div>
                 <div>Fiyat: {currency}{price.toFixed(2)}</div>
                 <Input
                   type="number"
                   placeholder="Alım fiyatı"
+                  className="text-black"
                   onChange={(e) => handleInput(asset.id, "buy", e.target.value)}
                 />
                 <Input
                   type="number"
                   placeholder="Adet"
+                  className="text-black"
                   onChange={(e) => handleInput(asset.id, "amount", e.target.value)}
                 />
                 <div>Güncel Değer: {currency}{valueNow.toFixed(2)}</div>
-                <div className={profit >= 0 ? "text-green-600" : "text-red-600"}>
+                <div className={profit >= 0 ? "text-green-400" : "text-red-400"}>
                   Kar/Zarar: {currency}{profit.toFixed(2)}
                 </div>
               </CardContent>
             </Card>
           );
         })}
-      </div>
-      <div className="mt-8 p-4 bg-gray-100 rounded-xl space-y-2 text-center text-lg font-medium">
-        <div>Toplam Yatırım: ₺{totalInvested.toFixed(2)}</div>
-        <div>Toplam Varlık Değeri: ₺{totalCurrent.toFixed(2)}</div>
-        <div className={totalProfit >= 0 ? "text-green-600" : "text-red-600"}>
-          Toplam Kar/Zarar: ₺{totalProfit.toFixed(2)}</div>
       </div>
     </div>
   );
